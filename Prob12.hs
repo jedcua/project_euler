@@ -16,17 +16,32 @@
 -- We can see that 28 is the first triangle number to have over five divisors.
 
 -- What is the value of the first triangle number to have over five hundred divisors?
---
 
-import Control.Monad.List
+import Control.Monad.State hiding (guard)
+import Control.Monad.List (guard)
 
+type Term = Int
+type Accumulator = Int
+type TriangleNum = Int
+
+getTriangleNum :: Term -> State Accumulator TriangleNum
+getTriangleNum n = do
+           acc <- get
+           let newAcc = acc + n
+           put newAcc
+           return newAcc
+
+generateTriangleNum :: [TriangleNum]
+generateTriangleNum = evalState (mapM getTriangleNum [1..]) 0
 
 getDivisors :: Int -> [Int]
 getDivisors n = do
-		k <- [1 .. n-1]
+		k <- [1..n]
 		guard (n `mod` k == 0)
 		return k
 
-countDivisors = length . getDivisors
+hasNDivisors :: Int -> Int -> Bool
+n `hasNDivisors` k = length divisors > k where
+	divisors = getDivisors n
 
-answer = foldr1
+answer = head $ filter (`hasNDivisors` 500) generateTriangleNum
