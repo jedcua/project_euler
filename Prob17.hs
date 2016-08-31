@@ -51,8 +51,8 @@ parseTens 9 0 = "ninety"
 parseTens 9 u = "ninety " ++ digitToWord u
 
 parseHundreds :: Int -> Int -> Int -> String
-parseHundreds h 0 0 = digitToWord h ++ " hundred"
 parseHundreds 0 t u = parseTens t u
+parseHundreds h 0 0 = digitToWord h ++ " hundred"
 parseHundreds h t u = digitToWord h ++ " hundred and " ++ parseTens t u
 
 parseThousands :: Int -> Int -> Int -> Int -> String
@@ -62,7 +62,7 @@ parseThousands th h t u = digitToWord th ++ " thousand " ++ parseHundreds h t u
 getDigits :: Int -> [Int]
 getDigits = map digitToInt . show
 
--- numberInWords :: Int -> String
+numberInWords :: Int -> String
 numberInWords n
 		| numDigits == 1 = digitToWord n
 		| numDigits == 2 = parseTens (head digits) (digits !! 1)
