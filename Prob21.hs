@@ -6,3 +6,15 @@
 -- therefore d(220) = 284. The proper divisors of 284 are 1, 2, 4, 71 and 142; so d(284) = 220.
 
 -- Evaluate the sum of all the amicable numbers under 10000.
+
+
+divisors :: Int -> [Int]
+divisors n = filter isDivisble [1..n-1] where
+    isDivisble k = n `mod` k == 0
+
+isAmicable :: Int -> Bool
+isAmicable n = sumDivisor k == n && k /= n  where
+    sumDivisor = sum . divisors
+    k = sumDivisor n
+
+answer = sum $ takeWhile (< 10000) $ filter isAmicable [1..]
