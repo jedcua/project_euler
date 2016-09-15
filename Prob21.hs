@@ -13,8 +13,8 @@ divisors n = filter isDivisble [1..n-1] where
     isDivisble k = n `mod` k == 0
 
 isAmicable :: Int -> Bool
-isAmicable n = sumDivisor k == n && k /= n  where
+isAmicable n = sumDivisor d == n && d /= n where
     sumDivisor = sum . divisors
-    k = sumDivisor n
+    d = sumDivisor n
 
 answer = sum $ takeWhile (< 10000) $ filter isAmicable [1..]

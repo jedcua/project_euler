@@ -80,12 +80,12 @@ move f g (x,y)
 	      y' = g y
 
 exhaustMoves :: [[Pos]]
-exhaustMoves = do 
-				  x <- [0 .. 19]
-				  y <- [0 .. 19]
-				  d <- [Down, Right, DownRight, UpRight]
-				  guard $ isJust (makeMoves (x,y) d)
-				  return $ fromJust (makeMoves (x,y) d)
+exhaustMoves = 
+        do x <- [0 .. 19]
+           y <- [0 .. 19]
+           d <- [Down, Right, DownRight, UpRight]
+           guard $ isJust (makeMoves (x,y) d)
+           return $ fromJust (makeMoves (x,y) d)
 
 makeProduct :: [Pos] -> Product
 makeProduct ps = Product p' ps' where
