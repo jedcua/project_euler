@@ -1,6 +1,10 @@
 module Prob26 where
 
-import Control.Monad.State
+import Data.Scientific
+import Data.Ratio
+import Data.List (sortBy)
+import Data.Either.Unwrap (fromRight)
+import Data.Maybe (isJust, fromJust)
 
 -- A unit fraction contains 1 in the numerator. The decimal representation of the unit fractions 
 -- with denominators 2 to 10 are given:
@@ -19,3 +23,24 @@ import Control.Monad.State
 
 -- Find the value of d < 1000 for which 1/d contains the longest recurring cycle in its 
 -- decimal fraction part.
+
+(/..?) :: Integer -> Integer -> Maybe [Int]
+n /..? d = case recurring of
+               Just recPos -> Just $ drop (recPos + decPtPos) digits
+               Nothing     -> Nothing
+           where (decimal, recurring) = fromRight $ fromRationalRepetend Nothing (n % d)
+                 (digits , decPtPos)  = toDecimalDigits decimal
+
+recurringPairs :: [(Integer, Maybe [Int])]
+recurringPairs = sortBy recurringLen $ filter (isJust . snd) pairs
+        where pairs = zip range recurring
+              range = [1..1000]
+              recurring = map (1 /..?) range
+
+recurringLen :: (Integer, Maybe [Int]) -> (Integer, Maybe [Int]) -> Ordering
+recurringLen (_, a) (_, b) = len' a `compare` len' b where
+    len' = length . fromJust
+
+answer :: String
+answer = "Number " ++ show num ++ " Recurring digits: " ++ (show . length . fromJust) rs
+        where (num, rs) = last recurringPairs
